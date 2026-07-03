@@ -1,0 +1,81 @@
+/**
+ * STOCKVISION - FOLHA DE ESTILOS MODULAR PARA A CURVA ABC
+ * Correção estrita de contraste e menu dropdown vazado para temas Light e Dark.
+ */
+
+/* Garante o preenchimento sólido do container do formulário */
+.data-section {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+/* 🔒 BLINDAGEM VISUAL E CONFIGURAÇÃO DE BORDAS PARA OS INPUTS E SELECTS */
+#checkout-product-select,
+#checkout-quantity {
+    background-color: var(--bg-body) !important;
+    color: var(--text-primary) !important;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+/* ⚪ CONFIGURAÇÃO ESPECÍFICA PARA O TEMA CLARO (LIGHT) */
+html[data-theme="light"] #checkout-product-select,
+html[data-theme="light"] #checkout-quantity {
+    border: 1px solid #cccccc !important; /* Borda cinza bem nítida no fundo claro */
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+}
+
+html[data-theme="light"] #checkout-product-select option {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+}
+
+/* ⚫ CONFIGURAÇÃO CRÍTICA PARA O TEMA ESCURO (DARK) - CORREÇÃO DO VAZAMENTO BRANCO */
+[data-theme="dark"] #checkout-product-select,
+[data-theme="dark"] #checkout-quantity {
+    border: 1px solid #444444 !important; /* Borda cinza clara/média visível no fundo escuro */
+    background-color: #112240 !important; /* Força o azul marinho intermediário de fundo */
+    color: #ffffff !important;            /* Texto estritamente branco */
+}
+
+/* Garante que a lista de opções suspensas herde o fundo escuro sólido no Windows/Chrome */
+[data-theme="dark"] #checkout-product-select option {
+    background-color: #112240 !important;
+    color: #ffffff !important;
+    padding: 0.5rem;
+}
+
+/* Destaca a borda usando a cor primária (azul/verde do sistema) quando o campo está focado */
+#checkout-product-select:focus,
+#checkout-quantity:focus {
+    border-color: var(--color-highlight) !important;
+    box-shadow: 0 0 4px var(--color-highlight);
+}
+
+/* Layout do container de alinhamento do botão */
+.button-container-checkout {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+/* Alinhamento do texto e preenchimento interno do botão de Checkout */
+.button-container-checkout .btn-primary {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-weight: bold;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+}

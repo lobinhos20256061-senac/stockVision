@@ -1,0 +1,205 @@
+/* =========================================================================
+   STOCKVISION - DEFINIÇÃO DE VARIÁVEIS DE AMBIENTE E CORES SEMÂNTICAS
+   ========================================================================= */
+
+:root {
+    /* --- CONFIGURAÇÃO PADRÃO: MODO CLARO --- */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f4f6f9;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #cbd5e1;
+    
+    /* Cores da Identidade StockVision */
+    --color-main-blue: #0284c7;  /* Confiança e Tecnologia */
+    --color-rupture: #ef4444;    /* Vermelho para Rupturas */
+    --color-excess: #f97316;     /* Laranja para Excesso */
+    --color-esg: #22c55e;        /* Verde para Sustentabilidade */
+    --color-highlight: #38bdf8;  /* Azul Claro para Destaques */
+    
+    /* 🎯 VARIÁVEIS DE CONTROLE EXCLUSIVAS DO BOTÃO (MODO CLARO) */
+    --btn-bg: #0284c7 !important;
+    --btn-text: #ffffff !important;
+    --btn-border: #0284c7 !important;
+    
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
+}
+
+[data-theme="dark"] {
+    /* --- ALTERNÂNCIA OBRIGATÓRIA: MODO ESCURO --- */
+    --bg-primary: #0a192f;       /* Azul Marinho de fundo */
+    --bg-secondary: #112240;     /* Azul Marinho intermediário */
+    --text-primary: #ffffff;     /* Letras brancas */
+    --text-secondary: #a8b2d1;   
+    --border-color: #233554;
+    
+    /* Destaque selecionado na página */
+    --color-main-blue: #38bdf8;  /* O azul principal vira o azul claro para destacar */
+    
+    /* 🎯 VARIÁVEIS DE CONTROLE EXCLUSIVAS DO BOTÃO (MODO ESCURO) */
+    --btn-bg: #38bdf8 !important;
+    --btn-text: #0a192f !important;
+    --btn-border: #38bdf8 !important;
+}
+
+/* =========================================================================
+   RESET BÁSICO DE ELEMENTOS
+   ========================================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+    min-height: 100vh;
+}
+
+/* =========================================================================
+   UTILITÁRIOS DE BOTÕES E ENTRADAS DE DADOS (INPUTS)
+   ========================================================================= */
+
+.btn, 
+.btn-primary,
+button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Sincronização dinâmica com o gerenciador de temas */
+    background-color: var(--btn-bg) !important;
+    color: var(--btn-text) !important;
+    border: 1px solid var(--btn-border) !important;
+    
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    transition: filter var(--transition-speed), transform 0.1s ease;
+}
+
+/* Efeito ao passar o mouse */
+.btn:hover,
+.btn-primary:hover,
+button[type="submit"]:hover {
+    filter: brightness(1.1) !important;
+}
+
+/* Feedback físico de clique */
+.btn:active,
+.btn-primary:active,
+button[type="submit"]:active {
+    transform: scale(0.98);
+}
+
+.input-group {
+    margin-bottom: 1.25rem;
+    width: 100%;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.input-group input, 
+.input-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--border-radius);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color var(--transition-speed);
+}
+
+/* Foco interativo na caixa de digitação */
+.input-group input:focus,
+.input-group select:focus {
+    border-color: var(--color-main-blue) !important;
+}
+
+/* =========================================================================
+   📱 SISTEMA DE RESPONSIVIDADE E MENU HAMBÚRGUER MOBILE
+   ========================================================================= */
+
+/* Parificação de seletores por Classe e ID para evitar conflito de especificidade */
+.menu-toggle-btn,
+#mobile-menu-btn {
+    display: none !important; /* Totalmente oculto em monitores/desktop */
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    cursor: pointer;
+    outline: none;
+    padding: 0.2rem;
+}
+
+/* 💻 REGRAS EXCLUSIVAS PARA TELAS MENORES (MOBILE E TABLETS) */
+@media (max-width: 768px) {
+    
+    /* Força a exibição do botão do menu seja por classe ou por ID corporativo */
+    .menu-toggle-btn,
+    #mobile-menu-btn {
+        display: block !important;
+    }
+
+    /* Modifica o container do dashboard para ocupar uma coluna única */
+    .dashboard-container {
+        display: block !important;
+        position: relative;
+    }
+
+    /* Transforma a sidebar fixa em uma gaveta flutuante e oculta */
+    .sidebar {
+        position: fixed !important;
+        top: 0;
+        left: -260px; /* Escondido para fora da tela do lado esquerdo */
+        width: 260px;
+        height: 100vh;
+        z-index: 999999 !important;
+        transition: left 0.3s ease-in-out;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+        background-color: var(--bg-secondary) !important; /* Mantém preenchimento opaco ao flutuar */
+    }
+
+    /* 🟢 CLASSE DE ATIVAÇÃO: Injetada via main.js, faz o menu deslizar suavemente */
+    .sidebar.mobile-open {
+        left: 0 !important;
+    }
+
+    /* Reajusta o espaçamento do conteúdo principal */
+    .main-content {
+        padding: 1rem !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* Ajusta os grids de workspaces e tabelas para empilharem verticalmente */
+    .stock-workspace {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .metrics-grid {
+        grid-template-columns: 1fr !important;
+    }
+}

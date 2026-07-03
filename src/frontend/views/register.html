@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision - Criar Conta</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/auth.css">
+</head>
+<body>
+
+    <header class="auth-header">
+        <button id="theme-toggle" class="theme-btn" aria-label="Alternar tema">🌓</button>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <div class="brand-area">
+                <h2>StockVision</h2>
+                <p class="slogan">Veja o futuro. Controle o resultado.</p>
+            </div>
+            
+            <h3 class="auth-title">Criar conta</h3>
+            <p class="auth-subtitle">Preencha os dados abaixo para começar</p>
+
+            <form id="register-form">
+                <div class="input-group">
+                    <label for="fullname">Nome Completo *</label>
+                    <input type="text" id="fullname" placeholder="Ex: João Silva" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="company">Nome da Empresa *</label>
+                    <input type="text" id="company" placeholder="Sua Empresa Ltda" required>
+                </div>
+
+                <div class="info-box">
+                    <p>Se você for o primeiro usuário desta empresa, será definido como administrador.</p>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Senha *</label>
+                    <input type="password" id="password" minlength="6" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm-password">Confirmar Senha *</label>
+                    <input type="password" id="confirm-password" minlength="6" required>
+                </div>
+
+                <button type="submit" class="btn">Criar conta</button>
+            </form>
+
+            <p class="auth-footer">
+                Já tem uma conta? <a href="login.html">Entrar</a>
+            </p>
+        </div>
+    </main>
+
+    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

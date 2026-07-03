@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision - Previsão Inteligente de Demanda</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/stock.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            
+            <div class="sidebar-brand">
+                <h2>StockVision</h2>
+                <p>Mapeamento de Armazéns NoSQL</p>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html">📊 Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="stock.html">📦 Estoque</a>
+                </li>
+                <li class="nav-item">
+                    <a href="sales.html">📈 Curva ABC</a>
+                </li>
+                
+                <li class="nav-item active">
+                    <a href="demand.html">🔮 Previsão de Demanda</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="partners.html">🤝 Pedidos & Fornecedores</a>
+                </li>
+                <li class="nav-item">
+                    <a href="reverse.html">♻️ Logística Reversa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="esg.html">🌱 Sustentabilidade (ESG)</a>
+                </li>
+                
+                <li style="margin: 2rem 0; border-top: 1px dashed var(--border-color); opacity: 0.5;"></li>
+                
+                <li class="nav-item">
+                    <a href="profile.html">👤 Perfil e Conta</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="#" onclick="handleUserLogout()" style="color: #dc3545 !important; font-weight: bold;">
+                        🟥 Logout
+                    </a>
+                </li>
+            </ul>
+
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="top-bar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle-btn" id="mobile-menu-btn" aria-label="Abrir Menu">☰</button>
+                    
+                    <div class="user-info">
+                        <h3>🔮 Motor de Inteligência & Previsão Preditiva</h3>
+                        <p id="company-sales-display">Análise Computacional de Demanda e Giro...</p>
+                    </div>
+                </div>
+                <button id="theme-toggle" class="theme-btn" aria-label="Alternar tema">🌓</button>
+            </header>
+
+            <section class="data-section" style="background: rgba(0, 123, 255, 0.03); border: 1px dashed var(--color-main-blue); margin-top: 1.5rem;">
+                <h4 style="color: var(--color-main-blue); margin-bottom: 5px;">🧠 Como o Algoritmo de IA funciona?</h4>
+                <p style="font-size: 0.875rem; line-height: 1.4; color: var(--text-secondary);">
+                    O sistema executa um cálculo de Média Móvel Ponderada sobre o histórico de movimentação, aplicando peso estrito para tendências de mercado de curto prazo. Esse resultado é cruzado em tempo real com o Giro de Estoque e o Lead Time do parceiro para calcular com exatidão o Ponto de Reposição Crítico.
+                </p>
+            </section>
+
+            <section class="metrics-grid" style="margin-top: 1.5rem;">
+                <div class="card">
+                    <div class="card-title">Ordens Sugeridas pela IA</div>
+                    <div class="card-value" id="total-orders-sug">0</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Investimento Total Previsto</div>
+                    <div class="card-value" id="total-investment-sug" style="color: var(--color-esg);">R$ 0,00</div>
+                </div>
+            </section>
+
+            <section class="data-section" style="margin-top: 1.5rem;">
+                <h3>📋 Recomendações Assistidas de Resuprimento</h3>
+                
+                <div class="table-responsive" style="margin-top: 1rem;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Fornecedor Homologado</th>
+                                <th>Estoque Atual</th>
+                                <th>Ponto de Resuprimento (Mín)</th>
+                                <th>Previsão Demanda (Próx Mês)</th>
+                                <th>Giro de Estoque</th>
+                                <th>Sugestão de Compra</th>
+                                <th>Ação Recomendada</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forecast-table-body">
+                            <tr>
+                                <td colspan="8" style="text-align: center;">Rodando matrizes e algoritmos preditivos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+
+    <script>
+        function handleUserLogout() {
+            const userConfirmation = confirm("Deseja realmente acessar a tela de login e encerrar a sessão?");
+            if (userConfirmation === true) {
+                if (typeof TokenManager !== 'undefined') {
+                    TokenManager.clearAll();
+                } else {
+                    localStorage.removeItem('sv_token');
+                    localStorage.removeItem('sv_user');
+                }
+                alert("Sessão encerrada com sucesso.");
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+
+    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const tableBody = document.getElementById('forecast-table-body');
+            const totalOrdersSug = document.getElementById('total-orders-sug');
+            const totalInvestmentSug = document.getElementById('total-investment-sug');
+            
+            // Tratamento preventivo para os seletores de identificação corporativa
+            const activeUser = typeof TokenManager !== 'undefined' ? TokenManager.getUser() : JSON.parse(localStorage.getItem('sv_user'));
+            if (activeUser) {
+                const displayEl = document.getElementById('company-sales-display') || document.getElementById('company-name-display');
+                if (displayEl) {
+                    displayEl.innerText = `Análise Corporativa: ${activeUser.company}`;
+                }
+            }
+
+            try {
+                const report = await StockAPI.getDemandForecast();
+                tableBody.innerHTML = '';
+                
+                let orderCount = 0;
+                let investmentSum = 0;
+
+                if (!report || report.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Nenhum produto cadastrado para análise de IA.</td></tr>';
+                    return;
+                }
+
+                report.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    if (item.sugestaoCompra > 0) {
+                        orderCount++;
+                        investmentSum += item.investimentoEstimado;
+                    }
+
+                    row.innerHTML = `
+                        <td><strong>🔮 ${item.name}</strong><br><small style="color:var(--text-secondary)">SKU: ${item.sku}</small></td>
+                        <td>${item.supplier || 'Não Informado'}</td>
+                        <td><strong>${item.quantityInStock}</strong> un</td>
+                        <td>${item.pontoDePedido} un</td>
+                        <td>${item.predictedDemand} un/mês</td>
+                        <td><span style="font-family:monospace; font-weight:bold;">${item.giroEstoque}x</span></td>
+                        <td style="color:${item.sugestaoCompra > 0 ? '#dc3545' : 'var(--text-primary)'}; font-weight:bold;">
+                            ${item.sugestaoCompra > 0 ? `+${item.sugestaoCompra} un` : '0 un'}
+                        </td>
+                        <td><span class="status-badge ${item.criticidade}">${item.acao}</span></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                totalOrdersSug.innerText = orderCount;
+                totalInvestmentSug.innerText = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(investmentSum);
+
+            } catch (error) {
+                tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; color:var(--color-rupture)">Falha ao ler o motor preditivo do servidor NoSQL.</td></tr>';
+            }
+        });
+    </script>
+</body>
+</html>

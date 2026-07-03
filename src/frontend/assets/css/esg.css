@@ -1,0 +1,101 @@
+/**
+ * STOCKVISION - FOLHA DE ESTILOS MODULAR PARA OS INDICADORES ESG
+ * Blindagem de contraste, cartões de metas e gráficos CSS nativos (Light/Dark).
+ */
+
+/* Grid principal para a área de Sustentabilidade */
+.esg-grid-dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Cartões de Indicadores ESG Rápidos */
+.esg-card-stat {
+    background-color: var(--bg-card) !important;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color) !important;
+    transition: transform 0.2s ease;
+}
+
+html[data-theme="light"] .esg-card-stat { border: 1px solid #cccccc !important; }
+[data-theme="dark"] .esg-card-stat { border: 1px solid #444444 !important; background-color: #112240 !important; }
+
+.esg-card-stat:hover {
+    transform: translateY(-2px);
+}
+
+/* Barras de Progresso Nativas para Metas Sustentáveis */
+.esg-progress-container {
+    width: 100%;
+    background-color: #ececec;
+    border-radius: 20px;
+    margin-top: 0.75rem;
+    overflow: hidden;
+    height: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .esg-progress-container {
+    background-color: #233554;
+}
+
+.esg-progress-bar {
+    height: 100%;
+    background-color: var(--color-esg) !important; /* Verde Sustentabilidade definido no global */
+    border-radius: 20px;
+    transition: width 0.5s ease-in-out;
+}
+
+/* Gráfico Comparativo Cronológico Mensal/Anual em CSS Puro */
+.esg-chart-container {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-top: 1.5rem;
+}
+
+html[data-theme="light"] .esg-chart-container { border: 1px solid #cccccc !important; }
+[data-theme="dark"] .esg-chart-container { border: 1px solid #444444 !important; background-color: #112240 !important; }
+
+.esg-bar-chart {
+    display: table;
+    width: 100%;
+    height: 200px;
+    margin: 2rem auto 1rem auto;
+    position: relative;
+}
+
+.esg-chart-column {
+    display: table-cell;
+    vertical-align: bottom;
+    text-align: center;
+    width: 14%;
+    position: relative;
+}
+
+.esg-chart-value {
+    display: block;
+    background-color: var(--color-main-blue);
+    width: 45%;
+    margin: 0 auto;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s ease;
+    min-height: 5px;
+}
+
+/* Diferenciação de cor para colunas de auditoria anual */
+.esg-chart-column:nth-child(even) .esg-chart-value {
+    background-color: var(--color-esg) !important;
+}
+
+.esg-chart-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+    font-weight: 500;
+}

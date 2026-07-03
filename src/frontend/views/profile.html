@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision - Perfil do Usuário</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/stock.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            
+            <div class="sidebar-brand">
+                <h2>StockVision</h2>
+                <p>Mapeamento de Armazéns NoSQL</p>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html">📊 Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="stock.html">📦 Estoque</a>
+                </li>
+                <li class="nav-item">
+                    <a href="sales.html">📈 Curva ABC</a>
+                </li>
+                <li class="nav-item">
+                    <a href="demand.html">🔮 Previsão de Demanda</a>
+                </li>
+                <li class="nav-item">
+                    <a href="partners.html">🤝 Pedidos & Fornecedores</a>
+                </li>
+                <li class="nav-item">
+                    <a href="reverse.html">♻️ Logística Reversa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="esg.html">🌱 Sustentabilidade (ESG)</a>
+                </li>
+                
+                <li style="margin: 2rem 0; border-top: 1px dashed var(--border-color); opacity: 0.5;"></li>
+                
+                <li class="nav-item active">
+                    <a href="profile.html">👤 Perfil e Conta</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="#" onclick="handleUserLogout()" style="color: #dc3545 !important; font-weight: bold;">
+                        🟥 Logout
+                    </a>
+                </li>
+            </ul>
+
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="top-bar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle-btn" id="mobile-menu-btn" aria-label="Abrir Menu">☰</button>
+                    
+                    <div class="user-info">
+                        <h3>👤 Perfil e Configurações de Acesso</h3>
+                        <p id="company-sales-display">Gerenciamento de Credenciais de Segurança Corporativa...</p>
+                    </div>
+                </div>
+                <button id="theme-toggle" class="theme-btn" aria-label="Alternar tema">🌓</button>
+            </header>
+
+            <div class="stock-workspace" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+                
+                <section class="data-section" style="margin-top: 0;">
+                    <h3>📋 Informações Pessoais e Segurança</h3>
+                    
+                    <form id="profile-update-form" style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1.5rem;">
+                        
+                        <div class="input-group">
+                            <label>Nome Completo</label>
+                            <input type="text" id="profile-fullname" readonly style="opacity: 0.7; cursor: not-allowed;">
+                        </div>
+
+                        <div class="input-group">
+                            <label>E-mail Corporativo</label>
+                            <input type="email" id="profile-email" readonly style="opacity: 0.7; cursor: not-allowed;">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Organização Vinculada</label>
+                            <input type="text" id="profile-company" readonly style="opacity: 0.7; cursor: not-allowed;">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Nova Senha de Acesso</label>
+                            <input type="password" id="profile-password" placeholder="Digite uma nova senha para alterar...">
+                        </div>
+
+                        <div style="width: 100%; display: flex; justify-content: center;">
+                            <button type="submit" class="btn btn-primary" style="font-weight: bold; padding: 0.8rem;">
+                                💾 Salvar Alterações de Segurança
+                            </button>
+                        </div>
+
+                    </form>
+                </section>
+
+                <section class="data-section" id="admin-management-section" style="margin-top: 0; display: none;">
+                    <h3>🔑 Administração: Redefinir Conta de Funcionário</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Como Administrador, você possui permissão para redefinir as credenciais de acesso das contas associadas.
+                    </p>
+                    
+                    <form id="admin-reset-form" style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1.5rem;">
+                        
+                        <div class="input-group">
+                            <label>E-mail do Funcionário *</label>
+                            <input type="email" id="reset-employee-email" placeholder="email@empresa.com" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Nova Senha Provisória *</label>
+                            <input type="password" id="reset-employee-password" placeholder="Nova senha" required>
+                        </div>
+
+                        <div style="width: 100%; display: flex; justify-content: center;">
+                            <button type="submit" class="btn" style="background: #e11d48 !important; border-color: #e11d48 !important; font-weight: bold; padding: 0.8rem;">
+                                🔒 Forçar Redefinição de Credencial
+                            </button>
+                        </div>
+
+                    </form>
+                </section>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function handleUserLogout() {
+            const userConfirmation = confirm("Deseja realmente encerrar o StockVision e sair do painel corporativo?");
+            
+            if (userConfirmation === true) {
+                if (typeof TokenManager !== 'undefined') {
+                    TokenManager.clearAll();
+                } else {
+                    localStorage.removeItem('sv_token');
+                    localStorage.removeItem('sv_user');
+                }
+                
+                alert("Sessão encerrada com sucesso.");
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+
+    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userData = typeof TokenManager !== 'undefined' ? TokenManager.getUser() : JSON.parse(localStorage.getItem('sv_user'));
+            
+            if (userData === null) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Popula os campos da tela com os dados recuperados
+            document.getElementById('profile-fullname').value = userData.fullname;
+            document.getElementById('profile-email').value = userData.email;
+            document.getElementById('profile-company').value = userData.company;
+            
+            const displayEl = document.getElementById('company-sales-display') || document.getElementById('company-profile-display');
+            if (displayEl) {
+                displayEl.innerText = `Corporação Ativa: ${userData.company}`;
+            }
+
+            // Exibe o painel de redefinição de senhas se o usuário for Admin
+            if (userData.isAdmin === true) {
+                const adminSection = document.getElementById('admin-management-section');
+                if (adminSection) adminSection.style.display = 'block';
+            }
+
+            // Envio do formulário do Usuário Comum
+            const profileForm = document.getElementById('profile-update-form');
+            if (profileForm) {
+                profileForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const newPassword = document.getElementById('profile-password').value;
+
+                    if (newPassword.trim() === '') {
+                        alert('Por favor, informe uma nova senha para realizar a atualização.');
+                        return;
+                    }
+
+                    try {
+                        const token = typeof TokenManager !== 'undefined' ? TokenManager.getToken() : localStorage.getItem('sv_token');
+                        const response = await fetch('http://localhost:3000/api/auth/reset-employee-password', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({
+                                employeeEmail: userData.email,
+                                newPassword: newPassword
+                            })
+                        });
+
+                        const data = await response.json();
+                        if (!response.ok) {
+                            throw new Error(data.message);
+                        }
+
+                        alert('Sua senha de acesso foi modificada com sucesso!');
+                        document.getElementById('profile-password').value = '';
+
+                    } catch (error) {
+                        alert(`Erro operacional: ${error.message}`);
+                    }
+                });
+            }
+
+            // Envio do formulário Administrativo (Reset de terceiros)
+            const adminForm = document.getElementById('admin-reset-form');
+            if (adminForm) {
+                adminForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const employeeEmail = document.getElementById('reset-employee-email').value.trim();
+                    const newPassword = document.getElementById('reset-employee-password').value;
+
+                    try {
+                        const token = typeof TokenManager !== 'undefined' ? TokenManager.getToken() : localStorage.getItem('sv_token');
+                        const response = await fetch('http://localhost:3000/api/auth/reset-employee-password', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({
+                                employeeEmail: employeeEmail,
+                                newPassword: newPassword
+                            })
+                        });
+
+                        const data = await response.json();
+                        if (!response.ok) {
+                            throw new Error(data.message);
+                        }
+
+                        alert(data.message || 'Credenciais atualizadas pelo Admin!');
+                        adminForm.reset();
+
+                    } catch (error) {
+                        alert(`Erro na redefinição: ${error.message}`);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

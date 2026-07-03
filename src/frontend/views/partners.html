@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision - Recebimento por Nota Fiscal (NF-e)</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/stock.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            
+            <div class="sidebar-brand">
+                <h2>StockVision</h2>
+                <p>Mapeamento de Armazéns NoSQL</p>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html">📊 Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="stock.html">📦 Estoque</a>
+                </li>
+                <li class="nav-item">
+                    <a href="sales.html">📈 Curva ABC</a>
+                </li>
+                <li class="nav-item">
+                    <a href="demand.html">🔮 Previsão de Demanda</a>
+                </li>
+                <li class="nav-item">
+                    <a href="partners.html">🤝 Pedidos & Fornecedores</a>
+                </li>
+                <li class="nav-item">
+                    <a href="reverse.html">♻️ Logística Reversa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="esg.html">🌱 Sustentabilidade (ESG)</a>
+                </li>
+                
+                <li style="margin: 2rem 0; border-top: 1px dashed var(--border-color); opacity: 0.5;"></li>
+                
+                <li class="nav-item">
+                    <a href="profile.html">👤 Perfil e Conta</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="#" onclick="handleUserLogout()" style="color: #dc3545 !important; font-weight: bold;">
+                        🟥 Logout
+                    </a>
+                </li>
+            </ul>
+
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="top-bar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle-btn" id="mobile-menu-btn" aria-label="Abrir Menu">☰</button>
+                    
+                    <div class="user-info">
+                        <h3>🧾 Ingestão Autônomo por Nota Fiscal (NF-e)</h3>
+                        <p id="company-sales-display">Desempacotamento de XML e Sincronização NoSQL...</p>
+                    </div>
+                </div>
+                <button id="theme-toggle" class="theme-btn" aria-label="Alternar tema">🌓</button>
+            </header>
+
+            <div class="stock-workspace" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+                
+                <section class="data-section" style="margin-top: 0;">
+                    <h3>📥 Ingestão de Texto Bruto de NF-e</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Cole o conteúdo estruturado ou as tags do arquivo XML gerado pela SEFAZ do seu fornecedor abaixo para rodar o desempacotamento de itens automáticos.
+                    </p>
+                    <form id="xml-invoice-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <textarea id="xml-input" rows="15" placeholder="Cole as tags da nota fiscal aqui..." required style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-primary); font-family: monospace; font-size: 0.85rem; outline: none; resize: vertical;"></textarea>
+                        
+                        <div style="width: 100%; display: flex; justify-content: center;">
+                            <button type="submit" class="btn btn-primary" style="font-weight: bold; padding: 0.8rem;">⚙️ Processar Nota e Estocar Itens</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="data-section" style="margin-top: 0;">
+                    <h3>📋 Relatório de Auditoria de Ingestão</h3>
+                    <div class="table-responsive" style="margin-top: 1rem; max-height: 430px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Material Identificado</th>
+                                    <th>Ação Operacional NoSQL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="xml-report-body">
+                                <tr><td colspan="2" style="text-align: center; color: var(--text-secondary);">Nenhuma nota fiscal na fila de processing.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function handleUserLogout() {
+            const userConfirmation = confirm("Deseja realmente acessar a tela de login e encerrar a sessão?");
+            if (userConfirmation === true) {
+                if (typeof TokenManager !== 'undefined') {
+                    TokenManager.clearAll();
+                } else {
+                    localStorage.removeItem('sv_token');
+                    localStorage.removeItem('sv_user');
+                }
+                alert("Sessão encerrada com sucesso.");
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+
+    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('xml-invoice-form');
+            const reportBody = document.getElementById('xml-report-body');
+            
+            // Tratamento preventivo para os seletores de identificação corporativa
+            const activeUser = typeof TokenManager !== 'undefined' ? TokenManager.getUser() : JSON.parse(localStorage.getItem('sv_user'));
+            if (activeUser) {
+                const displayEl = document.getElementById('company-sales-display') || document.getElementById('company-name-display');
+                if (displayEl) {
+                    displayEl.innerText = `Central de Recebimento: ${activeUser.company}`;
+                }
+            }
+
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const xmlData = document.getElementById('xml-input').value;
+                    const submitBtn = form.querySelector('.btn') || form.querySelector('.btn-primary');
+
+                    try {
+                        if (submitBtn) {
+                            submitBtn.innerText = 'Lendo e Processando Lotes...';
+                            submitBtn.disabled = true;
+                        }
+
+                        const result = await StockAPI.importInvoiceXml(xmlData);
+                        alert(result.message || 'Nota Fiscal estocada!');
+                        
+                        if (reportBody) {
+                            reportBody.innerHTML = '';
+                            result.summary.forEach(item => {
+                                const row = document.createElement('tr');
+                                const isIncrement = item.action.includes('Incrementado') || item.action.includes('Atualizado');
+                                row.innerHTML = `
+                                    <td><strong>📦 ${item.name}</strong></td>
+                                    <td><span class="status-badge ${isIncrement ? 'orange' : 'green'}">${item.action}</span></td>
+                                `;
+                                reportBody.appendChild(row);
+                            });
+                        }
+
+                        form.reset();
+
+                    } catch (error) {
+                        alert(`Falha no parse do XML: ${error.message}`);
+                    } finally {
+                        if (submitBtn) {
+                            submitBtn.innerText = '⚙️ Processar Nota e Estocar Itens';
+                            submitBtn.disabled = false;
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

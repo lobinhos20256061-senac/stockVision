@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision - Movimentações de Saída & Curva ABC</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/stock.css">
+    
+    <link rel="stylesheet" href="../assets/css/sales.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            
+            <div class="sidebar-brand">
+                <h2>StockVision</h2>
+                <p>Mapeamento de Armazéns NoSQL</p>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html">📊 Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="stock.html">📦 Estoque</a>
+                </li>
+                
+                <li class="nav-item active">
+                    <a href="sales.html">📈 Curva ABC</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="demand.html">🔮 Previsão de Demanda</a>
+                </li>
+                <li class="nav-item">
+                    <a href="partners.html">🤝 Pedidos & Fornecedores</a>
+                </li>
+                <li class="nav-item">
+                    <a href="reverse.html">♻️ Logística Reversa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="esg.html">🌱 Sustentabilidade (ESG)</a>
+                </li>
+                
+                <li style="margin: 2rem 0; border-top: 1px dashed var(--border-color); opacity: 0.5;"></li>
+                
+                <li class="nav-item">
+                    <a href="profile.html">👤 Perfil e Conta</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="#" onclick="handleUserLogout()" style="color: #dc3545 !important; font-weight: bold;">
+                        🟥 Encerrar Sessão (Logout)
+                    </a>
+                </li>
+            </ul>
+
+        </aside>
+
+        <main class="main-content">
+            
+            </aside>
+
+        <main class="main-content">
+            
+            <header class="top-bar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle-btn" id="mobile-menu-btn" aria-label="Abrir Menu">☰</button>
+                    
+                    <div class="user-info">
+                        <h3>📈 Motor de Saídas & Rotatividade Curva ABC</h3>
+                        <p id="company-sales-display">Análise de Fluxo de Caixa e Giro...</p>
+                    </div>
+                </div>
+                <button id="theme-toggle" class="theme-btn" aria-label="Alternar tema">🌓</button>
+            </header>
+
+            <div class="stock-workspace" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top: 1.5rem;">
+                
+                <section class="data-section" style="margin-top: 0; padding: 2rem; border-radius: 8px;">
+                    
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        📥 Registrar Checkout de Insumos
+                    </h3>
+                    
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.4;">
+                        Realize a baixa de materiais para faturamento. O saldo NoSQL será decrementado reativamente no MongoDB.
+                    </p>
+                    
+                    <form id="checkout-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        
+                        <div class="input-group">
+                            <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Selecionar Material Disponível *</label>
+                            <select id="checkout-product-select" required>
+                                <option value="">Carregando inventário...</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Quantidade de Saída *</label>
+                            <input type="number" id="checkout-quantity" min="1" value="1" required>
+                        </div>
+
+                        <div class="button-container-checkout">
+                            <button type="submit" class="btn btn-primary">
+                                <span>🚀 Confirmar Saída e Contabilizar Giro</span>
+                            </button>
+                        </div>
+
+                    </form>
+                </section>
+
+                <section class="data-section" style="margin-top: 0; padding: 2rem; border-radius: 8px;">
+                    <h3>📋 Matriz Analítica de Rotatividade (Curva ABC)</h3>
+                    
+                    <div class="table-responsive" style="margin-top: 1.5rem; max-height: 450px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Material / SKU</th>
+                                    <th style="text-align: center;">Estoque Atual</th>
+                                    <th style="text-align: center;">Vol. Vendido</th>
+                                    <th style="text-align: center;">Índice Giro</th>
+                                    <th>Diagnóstico de Giro</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sales-ranking-body">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: var(--text-secondary);">Aguardando sincronização com o motor NoSQL...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function handleUserLogout() {
+            const userConfirmation = confirm("Deseja realmente encerrar o StockVision e sair do painel corporativo?");
+            if (userConfirmation === true) {
+                if (typeof TokenManager !== 'undefined') {
+                    TokenManager.clearAll();
+                } else {
+                    localStorage.removeItem('sv_token');
+                    localStorage.removeItem('sv_user');
+                }
+                alert("Sessão encerrada com sucesso.");
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+
+    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

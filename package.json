@@ -1,0 +1,33 @@
+{
+  "name": "stockvision-backend",
+  "version": "1.0.0",
+  "description": "Sistema inteligente de gestão de estoque e logística com foco em ESG - SENAC",
+  "main": "src/backend/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/backend/server.js",
+    "dev": "nodemon src/backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wms",
+    "logistica",
+    "esg",
+    "senac",
+    "projeto-integrador"
+  ],
+  "author": "Deyson Santana",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.2"
+  }
+}

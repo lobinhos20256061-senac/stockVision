@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision - Indicadores e Painel ESG Avançado</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/esg.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            
+            <div class="sidebar-brand">
+                <h2>StockVision</h2>
+                <p>Mapeamento de Armazéns NoSQL</p>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html">📊 Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="stock.html">📦 Estoque</a>
+                </li>
+                <li class="nav-item">
+                    <a href="sales.html">📈 Curva ABC</a>
+                </li>
+                <li class="nav-item">
+                    <a href="demand.html">🔮 Previsão de Demanda</a>
+                </li>
+                <li class="nav-item">
+                    <a href="partners.html">🤝 Pedidos & Fornecedores</a>
+                </li>
+                <li class="nav-item">
+                    <a href="reverse.html">♻️ Logística Reversa</a>
+                </li>
+                
+                <li class="nav-item active">
+                    <a href="esg.html">🌱 Sustentabilidade (ESG)</a>
+                </li>
+                
+                <li style="margin: 2rem 0; border-top: 1px dashed var(--border-color); opacity: 0.5;"></li>
+                
+                <li class="nav-item">
+                    <a href="profile.html">👤 Perfil e Conta</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="#" onclick="handleUserLogout()" style="color: #dc3545 !important; font-weight: bold;">
+                        🟥 Logout
+                    </a>
+                </li>
+            </ul>
+
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="top-bar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle-btn" id="mobile-menu-btn" aria-label="Abrir Menu">☰</button>
+                    
+                    <div class="user-info">
+                        <h3>🌱 Painel Analítico de Ecoeficiência e ESG</h3>
+                        <p id="company-sales-display">Auditoria de Créditos de Carbono e Descarte de Embalagens...</p>
+                    </div>
+                </div>
+                <button id="theme-toggle" class="theme-btn" aria-label="Alternar tema">🌓</button>
+            </header>
+
+            <div class="esg-grid-dashboard" style="margin-top: 1.5rem;">
+                
+                <div class="esg-card-stat">
+                    <h4 style="color: var(--color-esg); margin-bottom: 0.5rem;">📉 Emissões Totais (CO₂e)</h4>
+                    <h2 id="esg-co2-display" style="font-size: 1.8rem; margin-bottom: 0.5rem;">0.00 Ton</h2>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">Pegada de carbono estimada do inventário ativo.</p>
+                    <div class="esg-progress-container">
+                        <div class="esg-progress-bar" style="width: 42%;"></div>
+                    </div>
+                </div>
+
+                <div class="esg-card-stat">
+                    <h4 style="color: var(--color-excess); margin-bottom: 0.5rem;">♻️ Destinação de Embalagens</h4>
+                    <h2 id="esg-recycle-display" style="font-size: 1.8rem; margin-bottom: 0.5rem;">0% Realizado</h2>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">Meta de circularidade reversa homologada.</p>
+                    <div class="esg-progress-container">
+                        <div class="esg-progress-bar" style="width: 78%; background-color: var(--color-excess) !important;"></div>
+                    </div>
+                </div>
+
+                <div class="esg-card-stat">
+                    <h4 style="color: var(--color-main-blue); margin-bottom: 0.5rem;">📜 Índice de Eco-Score</h4>
+                    <h2 id="esg-score-display" style="font-size: 1.8rem; margin-bottom: 0.5rem;">A+ Excelente</h2>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">Conformidade ambiental dos fornecedores cadastrados.</p>
+                    <div class="esg-progress-container">
+                        <div class="esg-progress-bar" style="width: 92%; background-color: var(--color-main-blue) !important;"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="esg-chart-container">
+                <h3 style="display: flex; align-items: center; gap: 0.5rem;">
+                    📊 Comparativo Cronológico de Pegada Ecológica (Anual vs Mensal)
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    Análise em tempo real do volume de CO₂ mitigado por ciclo operacional de armazenamento NoSQL.
+                </p>
+
+                <div class="esg-bar-chart">
+                    <div class="esg-chart-column">
+                        <div class="esg-chart-value" style="height: 85%;"></div>
+                        <span class="esg-chart-label">Jan/Fev</span>
+                    </div>
+                    <div class="esg-chart-column">
+                        <div class="esg-chart-value" style="height: 70%;"></div>
+                        <span class="esg-chart-label">Mar/Abr</span>
+                    </div>
+                    <div class="esg-chart-column">
+                        <div class="esg-chart-value" style="height: 95%;"></div>
+                        <span class="esg-chart-label">Mai/Jun</span>
+                    </div>
+                    <div class="esg-chart-column">
+                        <div class="esg-chart-value" style="height: 40%;"></div>
+                        <span class="esg-chart-label">Jul/Ago</span>
+                    </div>
+                    <div class="esg-chart-column">
+                        <div class="esg-chart-value" style="height: 60%;"></div>
+                        <span class="esg-chart-label">Set/Out</span>
+                    </div>
+                    <div class="esg-chart-column">
+                        <div class="esg-chart-value" style="height: 80%;"></div>
+                        <span class="esg-chart-label">Nov/Dez</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function handleUserLogout() {
+            if(confirm("Deseja realmente encerrar o StockVision e sair do painel corporativo?")) {
+                localStorage.removeItem('sv_token');
+                localStorage.removeItem('sv_user');
+                window.location.href = "login.html";
+            }
+        }
+
+        // Sincronização didática assíncrona dos emissores ESG
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                document.getElementById('esg-co2-display').innerText = "14.28 Ton";
+                document.getElementById('esg-recycle-display').innerText = "82.4% Realizado";
+            }, 800);
+        });
+    </script>
+
+    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
