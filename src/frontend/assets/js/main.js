@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td><strong>${alertItem.productName} (Lote)</strong></td>
                             <td>${alertItem.sku || 'Lote Crítico'}</td>
                             <td>${(alertItem.quantity || 0).toLocaleString('pt-BR')} un</td>
-                            <td style="color: var(--color-esg); font-weight: 600;">♻️ Risco Ambiental: Vence in ${alertItem.diasRestantes} dias</td>
+                            <td style="color: var(--color-esg); font-weight: 600;">♻️ Risco Ambiental: Vence em ${alertItem.diasRestantes} dias</td>
                             <td><span class="status-badge green">Log. Reversa</span></td>
                         `;
                         alertsTableBody.appendChild(row);
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================================================
-    // 3. FLUXO DO MÓDULO DE SAÍDAS E CURVA ABC
+    // 3. FLUXO DO MÓDULO DE SAÍDAS E CURVA ABC (PARTE 3)
     // =========================================================================
     const checkoutProductSelect = document.getElementById('checkout-product-select');
     const salesRankingBody = document.getElementById('sales-ranking-body');
@@ -494,34 +494,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadInventoryTable();
     }
+});
 
-   // =========================================================================
-    // 5. CONTROLADOR RESPONSIVO DA GAVETA (BLINDAGEM DE CLIQUE DIRECTO)
-    // =========================================================================
+// =========================================================================
+// 5. CONTROLADOR RESPONSIVO DA GAVETA (DELEGAÇÃO DE EVENTOS DE ALTA TOLERÂNCIA)
+// =========================================================================
+document.addEventListener('click', (e) => {
+    const sidebarElement = document.querySelector('.sidebar');
     
-    // Usamos delegação de eventos para garantir o clique mesmo com atraso no DOM
-    document.addEventListener('click', (e) => {
-        const sidebarElement = document.querySelector('.sidebar');
+    // Intercepta cliques de gatilhos móveis baseados em Classe ou ID corporativo
+    const clickedToggle = e.target.closest('#mobile-menu-btn') || e.target.closest('.menu-toggle-btn');
+
+    if (clickedToggle && sidebarElement) {
+        e.preventDefault();
+        e.stopPropagation();
         
-        // Verifica se o elemento clicado foi o botão hambúrguer ou se o clique veio de dentro dele
-        const clickedToggle = e.target.closest('#mobile-menu-btn') || e.target.closest('.menu-toggle-btn');
+        // Alterna o estado de visibilidade da barra lateral flutuante
+        sidebarElement.classList.toggle('mobile-open');
+        console.log("[StockVision Mobile]: Estado da gaveta alternado via delegação.");
+        return;
+    }
 
-        if (clickedToggle && sidebarElement) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Força a injeção ou remoção da classe de transição CSS
-            sidebarElement.classList.toggle('mobile-open');
-            console.log("[StockVision Mobile]: Menu colapsável alternado.");
-            return;
+    // Se o usuário clicar fora da sidebar ativa, removemos o estado aberto colapsando-a
+    if (sidebarElement && sidebarElement.classList.contains('mobile-open')) {
+        if (!sidebarElement.contains(e.target)) {
+            sidebarElement.classList.remove('mobile-open');
+            console.log("[StockVision Mobile]: Menu colapsado por clique externo.");
         }
-
-        // Se o menu estiver aberto e o usuário clicar em qualquer outro lugar de fora, nós fechamos
-        if (sidebarElement && sidebarElement.classList.contains('mobile-open')) {
-            if (!sidebarElement.contains(e.target)) {
-                sidebarElement.classList.remove('mobile-open');
-                console.log("[StockVision Mobile]: Menu fechado por clique externo.");
-            }
-        }
-    });
+    }
 });

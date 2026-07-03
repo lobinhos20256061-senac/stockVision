@@ -61,7 +61,7 @@ body {
 }
 
 /* =========================================================================
-   UTILITÁRIOS DE BOTÕES E ENTRADAS DE DADOS (INPUTS)
+   UTILITÁRIOS DE BOTÕES E ENTRADAS DE DADOS (INPUTS & DROPDOWNS)
    ========================================================================= */
 
 .btn, 
@@ -111,21 +111,43 @@ button[type="submit"]:active {
     color: var(--text-primary);
 }
 
+/* 🔥 BLINDAGEM UNIVERSAL CONTRA MENUS TRANSLÚCIDOS OU VAZADOS */
 .input-group input, 
-.input-group select {
+.input-group select,
+select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--border-color) !important;
     border-radius: var(--border-radius);
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
     outline: none;
     transition: border-color var(--transition-speed);
+    box-sizing: border-box;
+    appearance: none; /* Reseta estilos padrões do motor do navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
-/* Foco interativo na caixa de digitação */
+/* Força os elementos internos "option" a assumirem a cor sólida da caixa nos dois estados */
+.input-group select option,
+select option {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Força as cores específicas do Modo Escuro de forma estrita no Dropdown para anular bugs do Chrome */
+[data-theme="dark"] .input-group select,
+[data-theme="dark"] select,
+[data-theme="dark"] select option {
+    background-color: #112240 !important; /* Mesma cor marinho sólida intermediária do fundo */
+    color: #ffffff !important;
+}
+
+/* Foco interativo na caixa de digitação ou seleção */
 .input-group input:focus,
-.input-group select:focus {
+.input-group select:focus,
+select:focus {
     border-color: var(--color-main-blue) !important;
 }
 
