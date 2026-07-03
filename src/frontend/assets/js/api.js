@@ -3,7 +3,7 @@
  * Este arquivo centraliza todas as chamadas HTTP para o servidor Node.js.
  */
 
-const BASE_URL = 'https://stockvision-qn9r.onrender.com/api';
+const BASE_URL = 'https://stockvision-d2r0.onrender.com/api';
 
 // const BASE_URL = 'http://localhost:3000/api';
 
