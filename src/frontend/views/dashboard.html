@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="light">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockVision - Painel de Controle Principal</title>
+    <title>StockVision - Dashboard Operacional</title>
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/dashboard.css">
-    <link rel="stylesheet" href="../assets/css/stock.css">
+    
+    <!-- 🎨 OBRIGATÓRIO: Biblioteca do Chart.js para renderizar os gráficos da aplicação -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
     <div class="dashboard-container">
         
+        <!-- 🧭 MENU LATERAL (SIDEBAR) -->
         <aside class="sidebar">
-            
             <div class="sidebar-brand">
                 <h2>StockVision</h2>
                 <p>Mapeamento de Armazéns NoSQL</p>
@@ -48,76 +49,74 @@
                 <li class="nav-item">
                     <a href="profile.html">👤 Perfil e Conta</a>
                 </li>
-                
                 <li class="nav-item">
                     <a href="#" onclick="handleUserLogout()" style="color: #dc3545 !important; font-weight: bold;">
                         🟥 Logout
                     </a>
                 </li>
             </ul>
-
         </aside>
 
+        <!-- ÁREA PRINCIPAL DO SISTEMA -->
         <main class="main-content">
             
+            <!-- 🎯 CABEÇALHO SUPERIOR -->
             <header class="top-bar">
                 <div style="display: flex; align-items: center; gap: 1rem;">
                     <button class="menu-toggle-btn" id="mobile-menu-btn" aria-label="Abrir Menu">☰</button>
-                    
                     <div class="user-info">
-                        <h3>📊 Painel de Controle Principal</h3>
-                        <p id="company-sales-display">Sincronizando posições financeiras e volumétricas...</p>
+                        <h3>Olá, Administrador</h3>
+                        <p id="company-sales-display">Devas Ltda</p>
                     </div>
                 </div>
                 <button id="theme-toggle" class="theme-btn" aria-label="Alternar tema">🌓</button>
             </header>
 
-            <section class="metrics-grid">
-                
+            <!-- 💰 CARDS DE MÉTRICAS RÁPIDAS (KPIs) -->
+            <section class="metrics-grid" style="margin-top: 1.5rem;">
                 <div class="card">
                     <div class="card-title">Receita Geral Estimada</div>
                     <div class="card-value">R$ 0,00</div>
                 </div>
-                
                 <div class="card">
                     <div class="card-title">Custo de Aquisição Total</div>
-                    <div class="card-value">R$ 0,00</div>
+                    <div class="card-value" style="color: var(--color-rupture);">R$ 0,00</div>
                 </div>
-                
-                <div class="card" style="transition: all 0.3s ease-in-out;">
+                <div class="card">
                     <div class="card-title">Lucro Líquido Operacional</div>
                     <div class="card-value">R$ 0,00</div>
                 </div>
-                
                 <div class="card">
                     <div class="card-title">Volume Geral em Estoque</div>
-                    <div class="card-value">0 un</div>
+                    <div class="card-value" style="color: var(--color-main-blue);">0 un</div>
                 </div>
-
             </section>
 
-            <section class="stock-workspace" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+            <!-- 📊 ÁREA DE GRÁFICOS (CANVAS) -->
+            <div class="stock-workspace" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
                 
-                <div class="data-section" style="margin-top: 0;">
-                    <h3>📈 Evolução das Receitas e Custos</h3>
-                    <div style="position: relative; height: 260px; width: 100%;">
+                <!-- Gráfico de Receitas e Custos -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);">📈 Evolução das Receitas e Custos</h3>
+                    <div style="position: relative; height: 300px; width: 100%;">
                         <canvas id="financialChart"></canvas>
                     </div>
                 </div>
-                
-                <div class="data-section" style="margin-top: 0;">
-                    <h3>📦 Flutuação Mensal do Nível de Estoque</h3>
-                    <div style="position: relative; height: 260px; width: 100%;">
+
+                <!-- Gráfico de Estoque -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary);">📦 Flutuação Mensal do Nível de Estoque</h3>
+                    <div style="position: relative; height: 300px; width: 100%;">
                         <canvas id="stockChart"></canvas>
                     </div>
                 </div>
 
-            </section>
+            </div>
 
+            <!-- 🚨 TABELA DE ALERTAS OPERACIONAIS -->
             <section class="data-section" style="margin-top: 1.5rem;">
-                <h3>⚠️ Alertas Operacionais Críticos (WMS & ESG)</h3>
-                
-                <div class="table-responsive" style="margin-top: 1rem;">
+                <h3 style="margin-bottom: 1rem;">⚠️ Alertas Operacionais Críticos (WMS & ESG)</h3>
+                <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
@@ -130,7 +129,7 @@
                         </thead>
                         <tbody id="alerts-table-body">
                             <tr>
-                                <td colspan="5" style="text-align: center;">Sincronizando posições críticas do armazém NoSQL...</td>
+                                <td colspan="5" style="text-align: center;">Analisando parâmetros de criticidade...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -140,23 +139,18 @@
         </main>
     </div>
 
+    <!-- FUNÇÃO DE LOGOUT ISOLADA -->
     <script>
         function handleUserLogout() {
-            const userConfirmation = confirm("Deseja realmente encerrar o StockVision e sair do painel corporativo?");
-            
-            if (userConfirmation === true) {
-                if (typeof TokenManager !== 'undefined') {
-                    TokenManager.clearAll();
-                } else {
-                    localStorage.removeItem('sv_token');
-                    localStorage.removeItem('sv_user');
-                }
-                alert("Sessão encerrada com sucesso.");
+            if (confirm("Deseja realmente encerrar a sessão corporativa?")) {
+                localStorage.removeItem('sv_token');
+                localStorage.removeItem('sv_user');
                 window.location.href = "login.html";
             }
         }
     </script>
 
+    <!-- SCRIPTS CORE DO SISTEMA -->
     <script src="../assets/js/theme.js"></script>
     <script src="../assets/js/api.js"></script>
     <script src="../assets/js/main.js"></script>

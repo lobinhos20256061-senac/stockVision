@@ -111,7 +111,7 @@ button[type="submit"]:active {
     color: var(--text-primary);
 }
 
-/* 🔥 BLINDAGEM UNIVERSAL CONTRA MENUS TRANSLÚCIDOS OU VAZADOS */
+/* 🔒 BLINDAGEM UNIVERSAL CONTRA MENUS TRANSLÚCIDOS OU VAZADOS */
 .input-group input, 
 .input-group select,
 select {
@@ -124,7 +124,7 @@ select {
     outline: none;
     transition: border-color var(--transition-speed);
     box-sizing: border-box;
-    appearance: none; /* Reseta estilos padrões do motor do navegador */
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 }
@@ -140,7 +140,7 @@ select option {
 [data-theme="dark"] .input-group select,
 [data-theme="dark"] select,
 [data-theme="dark"] select option {
-    background-color: #112240 !important; /* Mesma cor marinho sólida intermediária do fundo */
+    background-color: #112240 !important;
     color: #ffffff !important;
 }
 
@@ -155,10 +155,10 @@ select:focus {
    📱 SISTEMA DE RESPONSIVIDADE E MENU HAMBÚRGUER MOBILE
    ========================================================================= */
 
-/* Parificação de seletores por Classe e ID para evitar conflito de especificidade */
+/* Parificação de seletores por Classe e ID para evitar conflito de especificidade no Desktop */
 .menu-toggle-btn,
 #mobile-menu-btn {
-    display: none !important; /* Totalmente oculto em monitores/desktop */
+    display: none !important; /* Oculto por padrão em monitores */
     background: transparent;
     border: none;
     color: var(--text-primary);
@@ -171,7 +171,7 @@ select:focus {
 /* 💻 REGRAS EXCLUSIVAS PARA TELAS MENORES (MOBILE E TABLETS) */
 @media (max-width: 768px) {
     
-    /* Força a exibição do botão do menu seja por classe ou por ID corporativo */
+    /* Força a exibição do botão do menu seja por classe ou por ID */
     .menu-toggle-btn,
     #mobile-menu-btn {
         display: block !important;
@@ -183,20 +183,22 @@ select:focus {
         position: relative;
     }
 
-    /* Transforma a sidebar fixa em uma gaveta flutuante e oculta */
+    /* 🚨 REVISÃO DA SIDEBAR: Forçamos o comportamento flutuante sobrepondo tudo e anulando o dashboard.css */
     .sidebar {
         position: fixed !important;
-        top: 0;
-        left: -260px; /* Escondido para fora da tela do lado esquerdo */
-        width: 260px;
-        height: 100vh;
+        top: 0 !important;
+        left: -260px !important; /* Totalmente jogada para fora da tela na esquerda */
+        width: 260px !important;
+        height: 100vh !important;
         z-index: 999999 !important;
-        transition: left 0.3s ease-in-out;
-        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
-        background-color: var(--bg-secondary) !important; /* Mantém preenchimento opaco ao flutuar */
+        display: flex !important; /* Garante o alinhamento vertical dos blocos internos */
+        flex-direction: column !important;
+        transition: left 0.3s ease-in-out !important; /* Efeito reativo deslizante */
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.4);
+        background-color: var(--bg-secondary) !important; 
     }
 
-    /* 🟢 CLASSE DE ATIVAÇÃO: Injetada via main.js, faz o menu deslizar suavemente */
+    /* 🟢 CLASSE DE ATIVAÇÃO MÁGICA: Quando injetada via JS, anula o left negativo e abre a gaveta */
     .sidebar.mobile-open {
         left: 0 !important;
     }
