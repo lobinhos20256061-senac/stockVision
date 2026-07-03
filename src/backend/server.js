@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path'); // 📂 Módulo nativo para manipulação de caminhos de arquivos
 const connectDB = require('./config/database.js');
 
 // --- IMPORTAÇÃO DOS ROTEADORES DO ECOSSISTEMA ---
@@ -30,6 +31,15 @@ app.use('/api/supply', supplyRoutes);
 
 // 🚀 REGISTRO CRÍTICO: Ativa as rotas de baixa e análise da Curva ABC
 app.use('/api/sales', salesRoutes); 
+
+// --- Configuração do Roteamento Estático no Backend ---
+// Define a pasta 'frontend' (que está um nível acima da pasta 'backend') para servir arquivos estáticos (CSS, JS, imagens)
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Rota curinga para servir o index.html como a página principal da aplicação
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 
